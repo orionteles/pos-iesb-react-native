@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native'
-import { Avatar, Card, Divider, List, Paragraph, Title } from 'react-native-paper'
+import { Avatar, Button, Card, Divider, List, Paragraph, Title } from 'react-native-paper'
+import ImagemCapa from '../../components/ImagemCapa'
 import apiFilmes from '../../services/apiFilmes'
 
 const FilmesDetalhes = ({ navigation, route }) => {
@@ -22,37 +23,37 @@ const FilmesDetalhes = ({ navigation, route }) => {
     }, [])
 
     const imagemAtor = (foto) => {
-
-        // if(foto){
-        //     return <Avatar.Image size={50} source={{ uri: 'https://image.tmdb.org/t/p/w500/' + foto }} />
-        // } else {
-        //     return <Avatar.Icon size={50} icon="account" />
-        // }
-
         return foto ?
-            <Avatar.Image size={50} source={{ uri: 'https://image.tmdb.org/t/p/w500/' + foto }} /> : 
+            <Avatar.Image size={50} source={{ uri: 'https://image.tmdb.org/t/p/w500/' + foto }} /> :
             <Avatar.Icon size={50} icon="account" />
-        
     }
 
     return (
         <ScrollView>
             {filme.id &&
                 <>
-                    <Text>{filme.title}</Text>
                     <Card>
-                        <Card.Cover source={{ uri: 'https://image.tmdb.org/t/p/w500/' + filme.poster_path }} />
+                        <ImagemCapa foto={filme.poster_path} tamanho={600} />
                         <Title>{filme.title}</Title>
                         <Paragraph>{filme.overview}</Paragraph>
                         <Paragraph>Data de Lançamento: {filme.release_date}</Paragraph>
                     </Card>
 
-                    <Text marginTop={20} style={{fontSize: 20, textAlign: 'center', color: 'red'}}>Atores</Text>
+                    <Button 
+                        margin={10} 
+                        icon="home" 
+                        mode="contained" 
+                        onPress={() => navigation.push('filmes/imagens', {id: filme.id})}
+                    >
+                        Ver Imagens
+                    </Button>
+
+                    <Text marginTop={20} style={{ fontSize: 20, textAlign: 'center', color: 'red' }}>Atores</Text>
                     {atores.map(ator => (
                         <View key={ator.id}>
-                            <List.Item
-                                title={ator.name}
-                                description={ator.character}
+                            <List.Item onPress={() => navigation.push('atores/detalhes', { id: ator.id })}
+                                title={ator.character}
+                                description={ator.name}
                                 left={() => imagemAtor(ator.profile_path)}
                             />
                             <Divider />
